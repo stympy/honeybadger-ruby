@@ -8,4 +8,5 @@ Net::HTTP.class_eval do
     end
   end
   alias request_without_honeybadger request
+  alias request request_with_honeybadger
 end
