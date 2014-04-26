@@ -1,4 +1,4 @@
-Net::HTTP.class_eval do
+class Net::HTTP
   def request_with_honeybadger(*args, &block)
     request = args[0]
     uri = request.path.match(%r{https?://}) ? URI(request.path) : URI("http#{use_ssl? ? 's' : ''}://#{address}:#{port}#{request.path}")
