@@ -24,6 +24,10 @@ module Honeybadger
         @thread = MetricsThread.new do
           begin
             until Thread.current[:should_exit] do
+              puts "THREAD: Here is the MetricsThread id: #{Thread.current.object_id}"
+              puts "THREAD: Here is the @thread id: #{@thread.object_id}"
+              puts "THREAD: Is the MetricsThread alive? #{Thread.current.alive?}"
+              puts "THREAD: Is the @thread alive? #{@thread.alive?}"
               send_metrics
               send_traces
               sleep @delay
@@ -32,10 +36,6 @@ module Honeybadger
             Honeybadger.write_verbose_log("Error in MetricsThread (shutting down): #{e.class} - #{e.message}\n#{e.backtrace.join("\n\t")}", :error)
             raise e
           end
-        end.tap do |thread|
-          thread.set_trace_func proc { |event, file, line, id, binding, classname|
-            printf "%8s %s:%-2d %10s %8s\n", event, file, line, id, classname
-          }
         end
       end
 
@@ -45,6 +45,8 @@ module Honeybadger
       end
 
       def timing(name, value)
+        puts "TIMING: Here is the @thread id: #{@thread.object_id}"
+        puts "TIMING: Is the @thread alive? #{@thread.alive?}"
         add_metric(name, value, :timing)
       end
 
