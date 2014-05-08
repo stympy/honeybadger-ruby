@@ -12,7 +12,7 @@ module Honeybadger
       def initialize
         init_metrics
         init_traces
-        @delay = defined?(::Rails) && ::Rails.env.development? ? 10 : 60
+        @delay = 10
         @per_request = 100
         @sender = Monitor::Sender.new(Honeybadger.configuration)
         @lock = Mutex.new
@@ -32,6 +32,10 @@ module Honeybadger
             Honeybadger.write_verbose_log("Error in MetricsThread (shutting down): #{e.class} - #{e.message}\n#{e.backtrace.join("\n\t")}", :error)
             raise e
           end
+        end.tap do |thread|
+          thread.set_trace_func proc { |event, file, line, id, binding, classname|
+            printf "%8s %s:%-2d %10s %8s\n", event, file, line, id, classname
+          }
         end
       end
 
