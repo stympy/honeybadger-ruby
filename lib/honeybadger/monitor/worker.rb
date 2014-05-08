@@ -36,6 +36,7 @@ module Honeybadger
       end
 
       def stop
+        ::Rails.logger.info "Stopping MetricsThread"
         @thread[:should_exit] = true if @thread
       end
 
