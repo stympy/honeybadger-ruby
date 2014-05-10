@@ -29,7 +29,7 @@ module Honeybadger
               puts "THREAD: Is the MetricsThread alive? #{Thread.current.alive?}"
               puts "THREAD: Is the @thread alive? #{@thread.alive?}"
               send_metrics
-              #send_traces
+              send_traces
               sleep @delay
             end
           rescue Exception => e
